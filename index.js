@@ -6,7 +6,11 @@ const server=require('http').createServer(app);
 require('dotenv').config();
 const dbConnect = require('./db.connect');
 const User=require('./routes/User.route.js')
+const Class=require('./routes/Class.route.js')
 const Article=require('./routes/Article.route.js')
+const io=require('socket.io')(server)
+// const client_socket=require('./socket/inbox.message.socket.js')(server)
+// const class_socket=require('./socket/class.message.socket.js')(server)
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -19,9 +23,18 @@ app.use(bodyParser.json({linmit:"50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}))
 
 app.use('/',User);
+app.use('/Class',Class);
+app.use('/Articles',Article);
 app.get('/',(req,res)=>{
-	console.log('hello guys');
-	res.json({message:'hello guys'})
+  console.log('hello guys');
+  res.json({message:'hello guys'})
 })
 const port =process.env.PORT;
+
+io.on('connection',(socket)=>{
+
+	socket.on("new_user",(data)=>console.log(data))
+})
+
 server.listen(port,console.log(`server is running on port ${port}`))
+
