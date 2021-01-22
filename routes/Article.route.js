@@ -67,7 +67,7 @@ router.put('/:id/update',upload,(req,res,next)=>{
     })
     .catch(err => res.status(500).json({ error: err.message }))
 })
-
+router.put('/:id/view',Article.increaseView)
 
 
 module.exports=router;

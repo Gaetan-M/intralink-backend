@@ -76,3 +76,9 @@ module.exports.getArticleImage=async (req, res) => {
   })
   .catch(err=>res.status(500).json(err.message))
 };
+module.exports.increaseView=(req,res,next)=>{
+  const id=req.params.id
+  Article.update({_id:id},{$inc:{View:1}})
+  .then(data=>res.status(200).json(data))
+  .catch(console.log)
+}

@@ -2,13 +2,13 @@ const express=require('express');
 const app=express();
 const cors=require('cors');
 const bodyParser=require('body-parser');
-const server=require('http').createServer(app);
+const server=require('http').Server(app);
+const io=require('socket.io').listen(server)
 require('dotenv').config();
 const dbConnect = require('./db.connect');
 const User=require('./routes/User.route.js')
 const Class=require('./routes/Class.route.js')
 const Article=require('./routes/Article.route.js')
-const io=require('socket.io')(server)
 // const client_socket=require('./socket/inbox.message.socket.js')(server)
 // const class_socket=require('./socket/class.message.socket.js')(server)
 app.use((req, res, next) => {
@@ -31,9 +31,9 @@ app.get('/',(req,res)=>{
 })
 const port =process.env.PORT;
 
-io.on('connection',(socket)=>{
-
-	socket.on("new_user",(data)=>console.log(data))
+io.sockets.on('connection',(socket)=>{
+	// console.log('connected')
+	socket.on("message",(data)=>console.log(data))
 })
 
 server.listen(port,console.log(`server is running on port ${port}`))
